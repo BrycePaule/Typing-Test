@@ -1,0 +1,9 @@
+
+WORD_LIST_FILEPATH = 'WORD_LIST'
+
+SCREEN_WIDTH = 500
+SCREEN_HEIGHT = 500
+window_x = (1920 / 2) - (SCREEN_WIDTH / 2)
+window_y = (1080 / 2) - (SCREEN_HEIGHT / 2)
+
+FPS = 144
