@@ -2,6 +2,7 @@ import os
 import pygame
 
 from Assets.Settings import *
+from Assets.TextManager import TextManager
 
 
 class TypingTest():
@@ -19,12 +20,21 @@ class TypingTest():
         self.screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
         self.clock = pygame.time.Clock()
 
+        self.text_manager = TextManager()
+        self.burb = None
+
+
     """ GAME LOGIC """
     def start_game(self):
+        """ Initialises game variables. """
+
+        self.blurb = self.text_manager.create_random_blurb()
         self.loop()
 
 
     def loop(self):
+        """ Main game loop. """
+
         while True:
             self.clock.tick(FPS)
 
@@ -36,27 +46,24 @@ class TypingTest():
                         pygame.quit()
 
             self.screen.fill((215, 175, 255))
+            self.blurb_box()
 
             pygame.display.update()
 
 
-    """ TESTERS """
-    def read_in_words(self, lower=False):
-        index = 1
-        word_dict = {}
+    def blurb_box(self):
+        box_width = 500
+        box_height = 200
 
-        with open(WORD_LIST_FILEPATH, 'r') as f:
-            for line in f:
-                if lower:
-                    line = line.lower()
-                word_dict[index] = line
-                index += 1
-
-        return word_dict
+        blurb_box = pygame.Surface((500, 200))
+        blurb_box.fill((255, 255, 255))
 
 
-    def print_word_list(self):
-        words = self.read_in_words(lower=True)
+        font = pygame.font.SysFont('Arial', 12)
+        text = font.render(self.blurb, 1, (255, 0, 0))
+        blurb_box.blit(text, (50, 50))
 
-        for word in words:
-            print(f'{word} {words[word]}')
+        self.screen.blit(blurb_box,
+                         ((SCREEN_WIDTH / 2) - (box_width / 2),
+                          (SCREEN_HEIGHT / 2) - box_height))
+

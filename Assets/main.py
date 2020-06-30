@@ -5,7 +5,6 @@ def main():
 
     g = TypingTest()
     g.start_game()
-    # g.main_menu()
 
 
 if __name__ == '__main__':

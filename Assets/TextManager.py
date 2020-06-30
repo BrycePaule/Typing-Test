@@ -1,0 +1,46 @@
+import random
+
+from Assets.Settings import WORD_LIST_FILEPATH
+
+
+class TextManager():
+
+    def __init__(self):
+        self.words = self.read_in_words(lower=True)
+        self.word_count = len(self.words)
+        self.char_limit = 250
+
+
+    def read_in_words(self, lower=False):
+        """ Reads in word list from .txt file """
+
+        index = 0
+        word_dict = {}
+
+        with open(WORD_LIST_FILEPATH, 'r') as f:
+            for line in f:
+                if lower:
+                    line = line.lower()
+                word_dict[index] = line.strip()
+                index += 1
+
+        return word_dict
+
+
+    def create_random_blurb(self):
+        """ Creates a random string of words.  """
+        chars = 0
+        text = ''
+
+        while chars < self.char_limit:
+            text += f' {self.words[random.randint(0, self.word_count - 1)]}'
+            chars = len(text)
+
+        return text
+
+
+    """ TESTERS """
+    def print_word_list(self):
+        """ Prints entire list of words on seperate lines.  """
+        for word in self.words:
+            print(f'{word} {self.words[word]}')
