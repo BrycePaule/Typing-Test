@@ -3,17 +3,18 @@ import pygame
 
 from Assets.Settings import *
 from Assets.TextManager import TextManager
+from Assets.BlurbBox import BlurbBox
 
 
 class TypingTest():
 
-    """ main game class, contains game loop """
+    """ Main game class, contains game loop """
 
     pygame.init()
     pygame.font.init()
     pygame.display.set_caption('Typing Test')
 
-    os.environ['SDL_VIDEO_WINDOW_POS'] = "%d, %d" % (window_x, window_y)
+    os.environ['SDL_VIDEO_WINDOW_POS'] = "%d, %d" % (WINDOW_X, WINDOW_Y)
 
 
     def __init__(self):
@@ -21,18 +22,20 @@ class TypingTest():
         self.clock = pygame.time.Clock()
 
         self.text_manager = TextManager()
-        self.burb = None
+        self.blurb_box = BlurbBox()
 
 
     """ GAME LOGIC """
+
     def start_game(self):
         """ Initialises game variables. """
 
-        self.blurb = self.text_manager.create_random_blurb()
-        self.loop()
+        self.blurb_box.blurb = self.text_manager.create_random_blurb()
+        self.blurb_box.convert_blurb_to_lines()
+        self.main_loop()
 
 
-    def loop(self):
+    def main_loop(self):
         """ Main game loop. """
 
         while True:
@@ -45,25 +48,14 @@ class TypingTest():
                     if event.key == pygame.K_ESCAPE:
                         pygame.quit()
 
-            self.screen.fill((215, 175, 255))
-            self.blurb_box()
+            self.screen.fill(BG_COLOR)
+            self.draw_blurb_box()
 
             pygame.display.update()
 
 
-    def blurb_box(self):
-        box_width = 500
-        box_height = 200
-
-        blurb_box = pygame.Surface((500, 200))
-        blurb_box.fill((255, 255, 255))
-
-
-        font = pygame.font.SysFont('Arial', 12)
-        text = font.render(self.blurb, 1, (255, 0, 0))
-        blurb_box.blit(text, (50, 50))
-
-        self.screen.blit(blurb_box,
-                         ((SCREEN_WIDTH / 2) - (box_width / 2),
-                          (SCREEN_HEIGHT / 2) - box_height))
+    def draw_blurb_box(self):
+        self.screen.blit(self.blurb_box.draw(),
+                         ((SCREEN_WIDTH / 2) - (self.blurb_box.width / 2),
+                          (SCREEN_HEIGHT / 2) - self.blurb_box.height))
 

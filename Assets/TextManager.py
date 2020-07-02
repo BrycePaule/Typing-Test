@@ -5,10 +5,15 @@ from Assets.Settings import WORD_LIST_FILEPATH
 
 class TextManager():
 
+    """
+    Responsible for everything to do with the word list, reads from file,
+    creates random blurbs, etc.
+    """
+
     def __init__(self):
         self.words = self.read_in_words(lower=True)
         self.word_count = len(self.words)
-        self.char_limit = 250
+        self.blurb_char_limit = 250
 
 
     def read_in_words(self, lower=False):
@@ -32,8 +37,8 @@ class TextManager():
         chars = 0
         text = ''
 
-        while chars < self.char_limit:
-            text += f' {self.words[random.randint(0, self.word_count - 1)]}'
+        while chars < self.blurb_char_limit:
+            text += f'{self.words[random.randint(0, self.word_count - 1)]} '
             chars = len(text)
 
         return text
