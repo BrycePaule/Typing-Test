@@ -12,6 +12,7 @@ WINDOW_Y = (1080 / 2) - (SCREEN_HEIGHT / 2)
 FPS = 144
 
 BG_COLOR = (215, 175, 255)
+INPUT_BOX_COLOR = (230, 205, 255)
 
 # TEXT
 FONT = pygame.font.Font('Assets/Fonts/Roboto-Thin.ttf', 16)

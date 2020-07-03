@@ -2,8 +2,11 @@ import os
 import pygame
 
 from Assets.Settings import *
+
 from Assets.TextManager import TextManager
-from Assets.BlurbBox import BlurbBox
+from Assets.Blurb import Blurb
+from Assets.InputBox import InputBox
+from Assets.InputManager import InputManager
 
 
 class TypingTest():
@@ -21,8 +24,11 @@ class TypingTest():
         self.screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
         self.clock = pygame.time.Clock()
 
+        self.blurb = Blurb()
+        self.input_box = InputBox()
+
         self.text_manager = TextManager()
-        self.blurb_box = BlurbBox()
+        self.input_manager = InputManager(self.blurb)
 
 
     """ GAME LOGIC """
@@ -30,8 +36,8 @@ class TypingTest():
     def start_game(self):
         """ Initialises game variables. """
 
-        self.blurb_box.blurb = self.text_manager.create_random_blurb()
-        self.blurb_box.convert_blurb_to_lines()
+        self.blurb.text = self.text_manager.create_random_blurb()
+        self.blurb.convert_blurb_to_lines()
         self.main_loop()
 
 
@@ -41,21 +47,28 @@ class TypingTest():
         while True:
             self.clock.tick(FPS)
 
-            for event in pygame.event.get():
-                if event.type == pygame.QUIT:
-                    pygame.quit()
-                elif event.type == pygame.KEYDOWN:
-                    if event.key == pygame.K_ESCAPE:
-                        pygame.quit()
+            self.input_manager.handle_events()
+            self.blurb.update()
 
             self.screen.fill(BG_COLOR)
             self.draw_blurb_box()
+            # self.draw_input_box()
+
+            # print(self.blurb.keystrokes)
+            # print(self.blurb.index)
 
             pygame.display.update()
 
 
     def draw_blurb_box(self):
-        self.screen.blit(self.blurb_box.draw(),
-                         ((SCREEN_WIDTH / 2) - (self.blurb_box.width / 2),
-                          (SCREEN_HEIGHT / 2) - self.blurb_box.height))
+        self.screen.blit(
+            self.blurb.draw(),
+            ((SCREEN_WIDTH / 2) - (self.blurb.width / 2),
+            (SCREEN_HEIGHT / 2) - self.blurb.height))
 
+
+    def draw_input_box(self):
+        self.screen.blit(
+            self.input_box.draw(),
+            ((SCREEN_WIDTH / 2) - (self.input_box.width / 2),
+            (SCREEN_HEIGHT / 2) - self.input_box.height / 2))
