@@ -27,6 +27,7 @@ class InputManager():
 
                 elif 97 <= event.key <= 122:
                     self.blurb.keystrokes += pygame.key.name(event.key)
+                    print(self.blurb.keystrokes)
 
                 # print(pygame.key.name(event.key))
                 # print(event.key)
