@@ -41,8 +41,9 @@ class Blurb():
 
         self.text_states[self.current_index][1] = 4
 
+        print(f'{self.current_index} {self.text[self.current_index]}')
+
         if len(self.keystrokes):
-            # print(f'{self.keystrokes[self.prev_index]}  -   {self.text[self.prev_index]}')
             if self.keystrokes[self.prev_index] == self.text[self.prev_index]:
                 self.text_states[self.prev_index] = [self.text_states[self.prev_index][0], 2]
             else:
@@ -54,14 +55,24 @@ class Blurb():
 
         xpos = 10
         ypos = 10
-        offset = 0
+        line_height = 20
 
-        for character, state in self.text_states:
+        x_offset = 0
+        y_offset = 0
+
+        for index, (character, state) in enumerate(self.text_states):
             char = FONT.render(character, 1, self.state_colour[state])
-            self.surface.blit(char, (xpos + offset, ypos))
 
+            # calc y_offset, reset x_offset if end of line
+            y_offset = (index // self.line_char_limit) * line_height
+            if index % self.line_char_limit == 0:
+                x_offset = 0
+
+            self.surface.blit(char, (xpos + x_offset, ypos + y_offset))
+
+            # offset each letter by the previous letter's width
             *_, char_width = FONT.metrics(character)[0]
-            offset += char_width
+            x_offset += char_width
 
         return self.surface
 
