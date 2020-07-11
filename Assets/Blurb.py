@@ -16,19 +16,57 @@ class Blurb():
 
         self.line_char_limit = 80
         self.text = None
+        self.text_states = None
         self.lines = None
 
+        self.state_colour = {
+            0: pygame.Color('white'),
+            1: pygame.Color('black'),
+            2: pygame.Color('green'),
+            3: pygame.Color('red'),
+            4: pygame.Color('white'),
+        }
+
         self.current_index = 0
+        self.prev_index = 0
         self.current_word = None
 
         self.keystrokes = ''
 
 
+
     def update(self):
         self.current_index = len(self.keystrokes)
+        self.prev_index = self.current_index - 1
+
+        self.text_states[self.current_index][1] = 4
+
+        if len(self.keystrokes):
+            # print(f'{self.keystrokes[self.prev_index]}  -   {self.text[self.prev_index]}')
+            if self.keystrokes[self.prev_index] == self.text[self.prev_index]:
+                self.text_states[self.prev_index] = [self.text_states[self.prev_index][0], 2]
+            else:
+                self.text_states[self.prev_index] = [self.text_states[self.prev_index][0], 3]
 
 
-    def draw_lines(self):
+    def draw(self):
+        self.surface.fill(BG_COLOR)
+
+        xpos = 10
+        ypos = 10
+        offset = 0
+
+        for character, state in self.text_states:
+            char = FONT.render(character, 1, self.state_colour[state])
+            self.surface.blit(char, (xpos + offset, ypos))
+
+            *_, char_width = FONT.metrics(character)[0]
+            offset += char_width
+
+        return self.surface
+
+
+    def draw2(self):
         self.surface.fill(BG_COLOR)
 
         xpos = 10
@@ -53,7 +91,8 @@ class Blurb():
 
         return self.surface
 
-    def draw(self):
+
+    def draw3(self):
         self.surface.fill(BG_COLOR)
 
         line_lengths = [(len(line) - 1) for line in self.lines]
@@ -81,18 +120,33 @@ class Blurb():
         return self.surface
 
 
-    def convert_blurb_to_lines(self):
-        """ Converts a blurb into lines long enough to print to screen.  """
-        self.lines = []
+    # def convert_blurb_to_lines(self):
+    #     """ Converts a blurb into lines long enough to print to screen.  """
+    #
+    #     self.lines = []
+    #
+    #     current_line = ''
+    #     chars = 0
+    #
+    #     for word in self.text.split():
+    #         if chars + len(word) > self.line_char_limit:
+    #             self.lines.append(current_line)
+    #             current_line = ''
+    #             chars = 0
+    #
+    #         current_line += f'{word} '
+    #         chars += len(word) + 1
 
-        current_line = ''
-        chars = 0
 
-        for word in self.text.split():
-            if chars + len(word) > self.line_char_limit:
-                self.lines.append(current_line)
-                current_line = ''
-                chars = 0
+    def convert_text_to_state_pairs(self):
+        """ Converts text into a list of (char, state) pairs. """
 
-            current_line += f'{word} '
-            chars += len(word) + 1
+        self.text_states = [[char, 1] for char in self.text]
+
+
+    def backspace_recolour(self):
+        """
+        Called when user backspaces, resets any chars typed back to black.
+        """
+
+        self.text_states[self.current_index][1] = 1

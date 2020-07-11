@@ -37,7 +37,7 @@ class TypingTest():
         """ Initialises game variables. """
 
         self.blurb.text = self.text_manager.create_random_blurb()
-        self.blurb.convert_blurb_to_lines()
+        self.blurb.convert_text_to_state_pairs()
         self.main_loop()
 
 

@@ -24,10 +24,11 @@ class InputManager():
 
                 elif event.key == pygame.K_BACKSPACE:
                     self.blurb.keystrokes = self.blurb.keystrokes[:-1]
+                    self.blurb.backspace_recolour()
 
                 elif 97 <= event.key <= 122:
                     self.blurb.keystrokes += pygame.key.name(event.key)
-                    print(self.blurb.keystrokes)
+                    # print(self.blurb.keystrokes)
 
                 # print(pygame.key.name(event.key))
                 # print(event.key)
