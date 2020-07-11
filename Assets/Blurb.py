@@ -10,7 +10,7 @@ class Blurb():
     """
 
     def __init__(self):
-        self.width = 600
+        self.width = 650
         self.height = 200
         self.surface = pygame.Surface((self.width, self.height))
 
@@ -34,20 +34,12 @@ class Blurb():
         self.keystrokes = ''
 
 
-
     def update(self):
         self.current_index = len(self.keystrokes)
         self.prev_index = self.current_index - 1
 
-        self.text_states[self.current_index][1] = 4
-
-        print(f'{self.current_index} {self.text[self.current_index]}')
-
         if len(self.keystrokes):
-            if self.keystrokes[self.prev_index] == self.text[self.prev_index]:
-                self.text_states[self.prev_index] = [self.text_states[self.prev_index][0], 2]
-            else:
-                self.text_states[self.prev_index] = [self.text_states[self.prev_index][0], 3]
+            self.update_char_state()
 
 
     def draw(self):
@@ -61,14 +53,36 @@ class Blurb():
         y_offset = 0
 
         for index, (character, state) in enumerate(self.text_states):
-            char = FONT.render(character, 1, self.state_colour[state])
 
-            # calc y_offset, reset x_offset if end of line
+            current_word = self.get_current_word(index)
+
+            # update x_offset / y_offset
+            line = index // self.line_char_limit
+            cum_line_limit = (line + 1) * self.line_char_limit
+
             y_offset = (index // self.line_char_limit) * line_height
-            if index % self.line_char_limit == 0:
-                x_offset = 0
+            if index + len(current_word) > cum_line_limit:
+                y_offset += line_height
+                if x_offset > 300:
+                    x_offset = 0
 
+
+            # # TESTING -----------------------------------------------
+            if index == self.current_index:
+                print(f'{index} "{current_word}" {cum_line_limit} - {line} {y_offset} {x_offset}  |||  {index + len(current_word) > cum_line_limit}  |||  {current_word == ""}  |||')
+            # # -------------------------------------------------------
+
+            char = FONT.render(character, 1, self.state_colour[state])
             self.surface.blit(char, (xpos + x_offset, ypos + y_offset))
+
+            # catches end of line spaces
+            if character == ' ':
+                if index == cum_line_limit - self.line_char_limit:
+                    y_offset += line_height
+                    x_offset = 0
+                elif index == cum_line_limit - 1:
+                    y_offset += line_height
+                    x_offset = 0
 
             # offset each letter by the previous letter's width
             *_, char_width = FONT.metrics(character)[0]
@@ -77,76 +91,10 @@ class Blurb():
         return self.surface
 
 
-    def draw2(self):
-        self.surface.fill(BG_COLOR)
+    def get_current_word(self, index):
+        """ Returns the current word """
 
-        xpos = 10
-        ypos = 10
-        line_height = 20
-
-        for index, line in enumerate(self.lines):
-            chars_typed = line[:self.current_index]
-            chars_remaining = line[self.current_index:]
-
-            offset = sum(char_width for (_, _, _, _, char_width) in FONT.metrics(chars_typed))
-
-            text = FONT.render(chars_remaining, 1, pygame.Color('black'))
-            self.surface.blit(text, (xpos + offset, ypos + (line_height * index)))
-
-            text = FONT.render(chars_typed, 1, pygame.Color('red'))
-            self.surface.blit(text, (xpos, ypos + (line_height * index)))
-
-            # text = FONT.render(chars_typed, 1, pygame.Color('green'))
-            # self.surface.blit(text, (xpos, ypos + (line_height * index)))
-
-
-        return self.surface
-
-
-    def draw3(self):
-        self.surface.fill(BG_COLOR)
-
-        line_lengths = [(len(line) - 1) for line in self.lines]
-
-        xpos = 10
-        ypos = 10
-        line_height = 20
-
-        x_offset = 0
-        y_offset = 0
-        current_line = 0
-
-        for index, char in enumerate(self.text):
-            chars_typed = self.text[:self.current_index]
-            chars_remaining = self.text[self.current_index:]
-            x_offset += FONT.metrics(char)[0][4]
-
-            if index > line_lengths[current_line]:
-                current_line += 1
-                x_offset = 0
-
-            text = FONT.render(char, 1, pygame.Color('black'))
-            self.surface.blit(text, (xpos + x_offset, ypos + (line_height * current_line)))
-
-        return self.surface
-
-
-    # def convert_blurb_to_lines(self):
-    #     """ Converts a blurb into lines long enough to print to screen.  """
-    #
-    #     self.lines = []
-    #
-    #     current_line = ''
-    #     chars = 0
-    #
-    #     for word in self.text.split():
-    #         if chars + len(word) > self.line_char_limit:
-    #             self.lines.append(current_line)
-    #             current_line = ''
-    #             chars = 0
-    #
-    #         current_line += f'{word} '
-    #         chars += len(word) + 1
+        return self.text[index:].split(' ')[0]
 
 
     def convert_text_to_state_pairs(self):
@@ -155,9 +103,18 @@ class Blurb():
         self.text_states = [[char, 1] for char in self.text]
 
 
+    def update_char_state(self):
+        """ Colours the typed character based on correctness """
+
+        self.text_states[self.current_index][1] = 4
+
+        if self.keystrokes[self.prev_index] == self.text[self.prev_index]:
+            self.text_states[self.prev_index] = [self.text_states[self.prev_index][0], 2]
+        else:
+            self.text_states[self.prev_index] = [self.text_states[self.prev_index][0], 3]
+
+
     def backspace_recolour(self):
-        """
-        Called when user backspaces, resets any chars typed back to black.
-        """
+        """ Resets backspaced character's state back to default. """
 
         self.text_states[self.current_index][1] = 1

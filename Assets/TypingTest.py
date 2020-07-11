@@ -52,10 +52,6 @@ class TypingTest():
 
             self.screen.fill(BG_COLOR)
             self.draw_blurb_box()
-            # self.draw_input_box()
-
-            # print(self.blurb.keystrokes)
-            # print(self.blurb.index)
 
             pygame.display.update()
 
