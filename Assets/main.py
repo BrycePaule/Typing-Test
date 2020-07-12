@@ -1,9 +1,9 @@
-from Assets.TypingTest import TypingTest
+from Assets.Type import Type
 
 
 def main():
 
-    g = TypingTest()
+    g = Type()
     g.start_game()
 
 

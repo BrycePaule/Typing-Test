@@ -9,7 +9,7 @@ from Assets.InputBox import InputBox
 from Assets.InputManager import InputManager
 
 
-class TypingTest():
+class Type():
 
     """ Main game class, contains game loop """
 
