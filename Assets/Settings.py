@@ -14,6 +14,11 @@ FPS = 144
 BG_COLOR = (215, 175, 255)
 INPUT_BOX_COLOR = (230, 205, 255)
 
+TEXT_MAIN = (24, 9, 41)
+TEXT_HIGHLIGHT = (170, 103, 248)
+TEXT_CORRECT = (24, 9, 41)
+TEXT_INCORRECT = (133, 9, 9)
+
 # TEXT
 FONT = pygame.font.Font('Assets/Fonts/Roboto-Thin.ttf', 16)
 # FONT = pygame.font.Font('Assets/Fonts/Roboto-Medium.ttf', 16)

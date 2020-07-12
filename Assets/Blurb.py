@@ -1,6 +1,8 @@
 import pygame
 
 from Assets.Settings import FONT, BG_COLOR
+from Assets.Settings import TEXT_MAIN, TEXT_HIGHLIGHT, TEXT_CORRECT, TEXT_INCORRECT
+
 
 class Blurb():
 
@@ -20,11 +22,11 @@ class Blurb():
         self.lines = None
 
         self.state_colour = {
-            0: pygame.Color('white'),
-            1: pygame.Color('black'),
-            2: pygame.Color('green'),
-            3: pygame.Color('red'),
-            4: pygame.Color('white'),
+            0: TEXT_HIGHLIGHT,
+            1: TEXT_MAIN,
+            2: TEXT_CORRECT,
+            3: TEXT_INCORRECT,
+            4: TEXT_HIGHLIGHT,
         }
 
         self.current_index = 0
@@ -68,8 +70,8 @@ class Blurb():
 
 
             # # TESTING -----------------------------------------------
-            if index == self.current_index:
-                print(f'{index} "{current_word}" {cum_line_limit} - {line} {y_offset} {x_offset}  |||  {index + len(current_word) > cum_line_limit}  |||  {current_word == ""}  |||')
+            # if index == self.current_index:
+            #     print(f'{index} "{current_word}" {cum_line_limit} - {line} {y_offset} {x_offset}  |||  {index + len(current_word) > cum_line_limit}  |||  {current_word == ""}  |||')
             # # -------------------------------------------------------
 
             char = FONT.render(character, 1, self.state_colour[state])

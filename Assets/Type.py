@@ -7,6 +7,7 @@ from Assets.TextManager import TextManager
 from Assets.Blurb import Blurb
 from Assets.InputBox import InputBox
 from Assets.InputManager import InputManager
+from Assets.Timer import Timer
 
 
 class Type():
@@ -30,6 +31,8 @@ class Type():
         self.text_manager = TextManager()
         self.input_manager = InputManager(self.blurb)
 
+        self.timer = Timer()
+
 
     """ GAME LOGIC """
 
@@ -38,6 +41,7 @@ class Type():
 
         self.blurb.text = self.text_manager.create_random_blurb()
         self.blurb.convert_text_to_state_pairs()
+        self.timer.start()
         self.main_loop()
 
 
@@ -52,7 +56,10 @@ class Type():
 
             self.screen.fill(BG_COLOR)
             self.draw_blurb_box()
+            self.draw_timer()
 
+            if self.timer.is_time_up():
+                break
             pygame.display.update()
 
 
@@ -61,6 +68,13 @@ class Type():
             self.blurb.draw(),
             ((SCREEN_WIDTH / 2) - (self.blurb.width / 2),
             (SCREEN_HEIGHT / 2) - self.blurb.height))
+
+
+    def draw_timer(self):
+        self.screen.blit(
+            self.timer.draw(),
+            (SCREEN_WIDTH - (SCREEN_WIDTH / 8),
+             SCREEN_HEIGHT - 7 * (SCREEN_HEIGHT / 8)))
 
 
     def draw_input_box(self):
