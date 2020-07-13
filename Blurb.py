@@ -41,9 +41,6 @@ class Blurb():
         self.current_index = len(self.keystrokes)
         self.prev_index = self.current_index - 1
 
-        print(self.current_index)
-        print(len(self.text))
-
         if len(self.keystrokes):
             self.update_char_state()
 
@@ -109,6 +106,9 @@ class Blurb():
         """ Converts text into a list of (char, state) pairs. """
 
         self.text_states = [[char, 1] for char in self.text]
+
+        if self.keystrokes == '':
+            self.text_states[0][1] = 4
 
 
     def update_char_state(self):

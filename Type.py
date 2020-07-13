@@ -66,13 +66,12 @@ class Type():
             # check finish blurb
             if self.blurb.current_index >= len(self.blurb.text) - 1:
                 self.blurb.text = self.text_manager.create_random_blurb()
-                self.blurb.convert_text_to_state_pairs()
                 self.blurb.keystrokes = ''
+                self.blurb.convert_text_to_state_pairs()
 
             # check finished
             if self.stat_tracker.check_timer():
-                print(len(self.blurb.keystrokes))
-                print(self.stat_tracker.counter.wpm)
+                print(f'WPM: {self.stat_tracker.counter.wpm}')
                 self.stop_game()
 
             # updates
