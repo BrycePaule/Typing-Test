@@ -64,9 +64,10 @@ class Type():
             self.clock.tick(FPS)
 
             # check finish blurb
-            if self.blurb.current_index >= len(self.blurb.text):
+            if self.blurb.current_index >= len(self.blurb.text) - 1:
                 self.blurb.text = self.text_manager.create_random_blurb()
                 self.blurb.convert_text_to_state_pairs()
+                self.blurb.keystrokes = ''
 
             # check finished
             if self.stat_tracker.check_timer():

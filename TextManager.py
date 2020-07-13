@@ -13,7 +13,7 @@ class TextManager():
     def __init__(self):
         self.words = self.read_in_words(lower=True)
         self.word_count = len(self.words)
-        self.blurb_char_limit = 250
+        self.blurb_char_limit = 100
 
 
     def read_in_words(self, lower=False):
@@ -33,13 +33,18 @@ class TextManager():
 
 
     def create_random_blurb(self):
-        """ Creates a random string of words.  """
+        """
+        Creates a random string of words.  Adds a space at the end to allow
+        for transition to next blurb if player finishes the current blurb. """
+
         chars = 0
         text = ''
 
         while chars < self.blurb_char_limit:
             text += f'{self.words[random.randint(0, self.word_count - 1)]} '
             chars = len(text)
+
+        text += ' '
 
         return text
 
