@@ -11,6 +11,7 @@ class Timer():
         self.interval = 30000
 
         self.active = False
+        self.curr_time = 0
         self.curr_time_in_seconds = '0'
 
         self.surface = pygame.Surface((100, 100))
@@ -35,6 +36,7 @@ class Timer():
             now = pygame.time.get_ticks()
             dt = now - self.start_time
 
+            self.curr_time = dt
             self.curr_time_in_seconds = self.convert_ticks_to_time(dt)
 
             if dt > self.interval:
@@ -46,7 +48,6 @@ class Timer():
 
 
     def convert_ticks_to_time(self, milliseconds):
-        """ DOESN'T WORK CURRENTLY """
 
         dec_places = 1
 
@@ -55,6 +56,6 @@ class Timer():
         milli -= seconds
 
         if milli < 1000:
-            return f'{seconds}.{str(milli)[0:dec_places]}'
+            return f'{seconds}.{str(milli)[-3:-3 + dec_places]}'
         else:
-            return f'{seconds}.{str(milli)[1:dec_places + 1]}'
+            return f'{seconds}.{str(milli)[-3:-3 + dec_places]}'

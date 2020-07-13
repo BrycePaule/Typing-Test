@@ -8,6 +8,7 @@ from Assets.Blurb import Blurb
 from Assets.InputBox import InputBox
 from Assets.InputManager import InputManager
 from Assets.Timer import Timer
+from Assets.Stats import Stats
 
 
 class Type():
@@ -31,7 +32,7 @@ class Type():
         self.text_manager = TextManager()
         self.input_manager = InputManager(self.blurb)
 
-        self.timer = Timer()
+        self.stat_tracker = Stats()
 
 
     """ GAME LOGIC """
@@ -41,7 +42,8 @@ class Type():
 
         self.blurb.text = self.text_manager.create_random_blurb()
         self.blurb.convert_text_to_state_pairs()
-        self.timer.start()
+
+        self.stat_tracker.timer.start()
         self.main_loop()
 
 
@@ -53,13 +55,16 @@ class Type():
 
             self.input_manager.handle_events()
             self.blurb.update()
+            self.stat_tracker.update()
+            self.stat_tracker.counter.word_count = self.blurb.word_count
+            self.stat_tracker.counter.time = self.stat_tracker.timer.curr_time
+            if self.stat_tracker.timer.is_time_up():
+                break
 
             self.screen.fill(BG_COLOR)
             self.draw_blurb_box()
-            self.draw_timer()
+            self.draw_stats()
 
-            if self.timer.is_time_up():
-                break
             pygame.display.update()
 
 
@@ -70,9 +75,9 @@ class Type():
             (SCREEN_HEIGHT / 2) - self.blurb.height))
 
 
-    def draw_timer(self):
+    def draw_stats(self):
         self.screen.blit(
-            self.timer.draw(),
+            self.stat_tracker.draw(),
             (SCREEN_WIDTH - (SCREEN_WIDTH / 8),
              SCREEN_HEIGHT - 7 * (SCREEN_HEIGHT / 8)))
 

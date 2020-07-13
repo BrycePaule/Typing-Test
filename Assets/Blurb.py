@@ -33,6 +33,7 @@ class Blurb():
         self.prev_index = 0
         self.current_word = None
 
+        self.word_count = 0
         self.keystrokes = ''
 
 
@@ -42,6 +43,8 @@ class Blurb():
 
         if len(self.keystrokes):
             self.update_char_state()
+
+        self.update_word_count()
 
 
     def draw(self):
@@ -120,3 +123,12 @@ class Blurb():
         """ Resets backspaced character's state back to default. """
 
         self.text_states[self.current_index][1] = 1
+
+
+    def update_word_count(self):
+        words = [word for word in self.text[:self.current_index].split(' ') if word != '']
+
+        if len(words) <= 1:
+            return 0
+        else:
+            self.word_count = len(words) - 1
