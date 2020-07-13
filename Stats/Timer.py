@@ -1,14 +1,14 @@
 import pygame
 
-from Assets.Settings import FONT
-from Assets.Settings import BG_COLOR, TEXT_MAIN
+from Settings import FONT
+from Settings import BG_COLOR, TEXT_MAIN
 
 
 class Timer():
 
     def __init__(self):
         self.start_time = 0
-        self.interval = 30000
+        self.interval = 60000
 
         self.active = False
         self.curr_time = 0
@@ -29,6 +29,10 @@ class Timer():
     def start(self):
         self.active = True
         self.start_time = pygame.time.get_ticks()
+
+
+    def stop(self):
+        self.active = False
 
 
     def is_time_up(self):

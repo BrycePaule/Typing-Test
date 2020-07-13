@@ -1,6 +1,6 @@
 import pygame
 
-from Assets.Settings import INPUT_BOX_COLOR
+from Settings import INPUT_BOX_COLOR
 
 class InputBox():
 

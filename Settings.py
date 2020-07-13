@@ -2,7 +2,7 @@ import pygame
 
 pygame.font.init()
 
-WORD_LIST_FILEPATH = 'Assets/WORD_LIST.txt'
+WORD_LIST_FILEPATH = 'WordList/WORD_LIST.txt'
 
 SCREEN_WIDTH = 1000
 SCREEN_HEIGHT = 500
@@ -20,6 +20,8 @@ TEXT_CORRECT = (24, 9, 41)
 TEXT_INCORRECT = (133, 9, 9)
 
 # TEXT
-FONT = pygame.font.Font('Assets/Fonts/Roboto-Thin.ttf', 16)
-# FONT = pygame.font.Font('Assets/Fonts/Roboto-Medium.ttf', 16)
+# FONT = pygame.font.Font('Assets/Fonts/Roboto-Thin.ttf', 20)
+# FONT = pygame.font.Font('Assets/Fonts/Roboto-Light.ttf', 20)
+FONT = pygame.font.Font('Assets/Fonts/Roboto-Regular.ttf', 20)
+# FONT = pygame.font.Font('Assets/Fonts/Roboto-Medium.ttf', 20)
 # FONT = pygame.font.Font('Assets/Fonts/Roboto-Bold.ttf', 14)

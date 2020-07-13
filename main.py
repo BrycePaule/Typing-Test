@@ -1,10 +1,10 @@
-from Assets.Type import Type
+from Type import Type
 
 
 def main():
 
     g = Type()
-    g.start_game()
+    g.setup_game()
 
 
 if __name__ == '__main__':

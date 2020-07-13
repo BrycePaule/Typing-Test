@@ -1,7 +1,7 @@
 import pygame
 
-from Assets.Settings import FONT, BG_COLOR
-from Assets.Settings import TEXT_MAIN, TEXT_HIGHLIGHT, TEXT_CORRECT, TEXT_INCORRECT
+from Settings import FONT, BG_COLOR
+from Settings import TEXT_MAIN, TEXT_HIGHLIGHT, TEXT_CORRECT, TEXT_INCORRECT
 
 
 class Blurb():
@@ -16,7 +16,7 @@ class Blurb():
         self.height = 200
         self.surface = pygame.Surface((self.width, self.height))
 
-        self.line_char_limit = 80
+        self.line_char_limit = 60
         self.text = None
         self.text_states = None
         self.lines = None
@@ -40,6 +40,9 @@ class Blurb():
     def update(self):
         self.current_index = len(self.keystrokes)
         self.prev_index = self.current_index - 1
+
+        print(self.current_index)
+        print(len(self.text))
 
         if len(self.keystrokes):
             self.update_char_state()
@@ -77,7 +80,7 @@ class Blurb():
             #     print(f'{index} "{current_word}" {cum_line_limit} - {line} {y_offset} {x_offset}  |||  {index + len(current_word) > cum_line_limit}  |||  {current_word == ""}  |||')
             # # -------------------------------------------------------
 
-            char = FONT.render(character, 1, self.state_colour[state])
+            char = FONT.render(character, True, self.state_colour[state])
             self.surface.blit(char, (xpos + x_offset, ypos + y_offset))
 
             # catches end of line spaces
@@ -126,9 +129,11 @@ class Blurb():
 
 
     def update_word_count(self):
+        """ WORKS - currently counts the word you're typing as COMPLETE """
+
         words = [word for word in self.text[:self.current_index].split(' ') if word != '']
 
-        if len(words) <= 1:
+        if len(words) == 0:
             return 0
         else:
-            self.word_count = len(words) - 1
+            self.word_count = len(words)

@@ -1,6 +1,6 @@
 import random
 
-from Assets.Settings import WORD_LIST_FILEPATH
+from Settings import WORD_LIST_FILEPATH
 
 
 class TextManager():
