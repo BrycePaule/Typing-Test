@@ -7,6 +7,7 @@ from Blurb import Blurb
 from InputBox import InputBox
 from InputManager import InputManager
 from Stats.Stats import Stats
+from Keyboard.Keyboard import Keyboard
 
 
 class Type():
@@ -28,8 +29,9 @@ class Type():
         self.input_box = InputBox()
 
         self.text_manager = TextManager()
-        self.input_manager = InputManager(self)
         self.stat_tracker = Stats()
+        self.keyboard = Keyboard()
+        self.input_manager = InputManager(self, self.keyboard)
         self.running = False
 
 
@@ -83,6 +85,8 @@ class Type():
             self.screen.fill(BG_COLOR)
             self.draw_blurb_box()
             self.draw_stats()
+            self.draw_keyboard()
+
             pygame.display.update()
 
 
@@ -98,6 +102,13 @@ class Type():
             self.stat_tracker.draw(),
             (SCREEN_WIDTH - SCREEN_WIDTH / 8,
              SCREEN_HEIGHT - 7 * SCREEN_HEIGHT / 8))
+
+
+    def draw_keyboard(self):
+        self.screen.blit(
+            self.keyboard.draw(),
+            (SCREEN_WIDTH / 2 - self.keyboard.width / 2,
+             SCREEN_HEIGHT - 3 * SCREEN_HEIGHT / 8))
 
 
     def reset(self):

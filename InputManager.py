@@ -2,7 +2,7 @@ import pygame
 
 class InputManager():
 
-    def __init__(self, game):
+    def __init__(self, game, keyboard):
         self.game = game
 
 
