@@ -16,7 +16,7 @@ class Timer():
 
         self.active = False
         self.curr_time = 0
-        self.curr_time_in_seconds = '0'
+        self.curr_time_in_seconds = '0 s'
 
         self.surface = pygame.Surface((100, 100))
 
@@ -77,6 +77,6 @@ class Timer():
         milli -= seconds
 
         if milli < 1000:
-            return f'{seconds}.{str(milli)[-3:-3 + dec_places]}'
+            return f'{seconds}.{str(milli)[-3:-3 + dec_places]} s'
         else:
-            return f'{seconds}.{str(milli)[-3:-3 + dec_places]}'
+            return f'{seconds}.{str(milli)[-3:-3 + dec_places]} s'

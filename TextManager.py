@@ -42,6 +42,11 @@ class TextManager():
         text = ''
 
         while chars < self.blurb_char_limit:
+            new_word = self.get_random_word()
+
+            while new_word in text:
+                new_word = self.get_random_word()
+
             text += f'{self.words[random.randint(0, self.word_count - 1)]} '
             chars = len(text)
 
@@ -67,6 +72,10 @@ class TextManager():
 
         text += ' '
         return text
+
+
+    def get_random_word(self):
+        return self.words[random.randint(0, self.word_count - 1)]
 
 
     def print_word_list(self):

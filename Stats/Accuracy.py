@@ -24,18 +24,20 @@ class Accuracy():
         if self.text is not None and self.keystrokes is not None:
             self.calculate_accuracy()
 
+        print(self.text)
+
 
     def draw(self):
         self.surface.fill(BG_COLOR)
 
-        accuracy = FONT.render(f'{self.accuracy}%', 1, TEXT_MAIN)
+        accuracy = FONT.render(f'{self.accuracy} %', 1, TEXT_MAIN)
         self.surface.blit(accuracy, (0, 0))
 
         return self.surface
 
 
     def calculate_accuracy(self):
-        """ Calculates letter accuracy %. """
+        """ Calculates letter accuracy percentage. """
 
         text_words = [word for word in self.text.split(' ')]
         typed_words = [word for word in self.keystrokes.split(' ')][:-1]

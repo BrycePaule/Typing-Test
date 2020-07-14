@@ -42,7 +42,6 @@ class Type():
 
         self.running = False
         self.blurb.text = self.text_manager.create_random_blurb()
-        # self.blurb.text = self.text_manager.create_w_blurb()
         self.blurb.convert_text_to_state_pairs()
         self.main_loop()
 
@@ -75,7 +74,6 @@ class Type():
             if self.blurb.current_index >= len(self.blurb.text) - 1:
                 self.blurb.text = self.text_manager.create_random_blurb()
                 self.stat_tracker.set_accuracy_text(self.blurb.text)
-                # self.blurb.text = self.text_manager.create_w_blurb()
                 self.blurb.keystrokes = ''
                 self.blurb.convert_text_to_state_pairs()
 
