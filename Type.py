@@ -6,7 +6,7 @@ from TextManager import TextManager
 from Blurb import Blurb
 from InputBox import InputBox
 from InputManager import InputManager
-from Stats.Stats import Stats
+from Stats.StatisticsManager import StatisticsManager
 from Keyboard.Keyboard import Keyboard
 
 
@@ -29,7 +29,7 @@ class Type():
         self.input_box = InputBox()
 
         self.text_manager = TextManager()
-        self.stat_tracker = Stats()
+        self.stat_tracker = StatisticsManager()
         self.keyboard = Keyboard()
         self.input_manager = InputManager(self)
         self.running = False
@@ -47,6 +47,8 @@ class Type():
 
 
     def start_game(self):
+        """ Resets stats and starts a new game. """
+
         self.reset()
         self.stat_tracker.timer.start()
         self.running = True
@@ -54,6 +56,8 @@ class Type():
 
 
     def stop_game(self):
+        """ Stops the current game, halts timer, DOESN'T reset. """
+
         self.stat_tracker.timer.stop()
         self.running = False
         self.main_loop()
@@ -91,33 +95,41 @@ class Type():
             pygame.display.update()
 
 
+    """ DRAWING """
+
     def draw_blurb_box(self):
+        """ Draw the blurb. """
+
         self.screen.blit(
             self.blurb.draw(),
-            (SCREEN_WIDTH / 2 - self.blurb.width / 2,
-             SCREEN_HEIGHT / 2 - self.blurb.height))
+            (SCREEN_WIDTH / 2 - self.blurb.width / 2, SCREEN_HEIGHT / 2 - self.blurb.height)
+        )
 
 
     def draw_stats(self):
+        """ Draws all stats.  Stats manages wpm / timer / accuracy. """
+
         self.screen.blit(
             self.stat_tracker.draw(),
-            (SCREEN_WIDTH - SCREEN_WIDTH / 8,
-             SCREEN_HEIGHT - 7 * SCREEN_HEIGHT / 8))
+            (SCREEN_WIDTH - SCREEN_WIDTH / 8, SCREEN_HEIGHT - 7 * SCREEN_HEIGHT / 8)
+        )
 
 
     def draw_keyboard(self):
+        """ Draws the on screen keyboard. """
+
         self.screen.blit(
             self.keyboard.draw(),
-            (SCREEN_WIDTH / 2 - self.keyboard.width / 2,
-             SCREEN_HEIGHT - 3 * SCREEN_HEIGHT / 8))
+            (SCREEN_WIDTH / 2 - self.keyboard.width / 2, SCREEN_HEIGHT - 3 * SCREEN_HEIGHT / 8)
+        )
 
+
+    """ UTILITIES """
 
     def reset(self):
+        """
+        Resets the stat tracker, intended for multiple runs in the same session.
+
+        TODO: rework so it carries over accuracy / wpm etc
+        """
         self.stat_tracker.__init__()
-
-
-    # def draw_input_box(self):
-    #     self.screen.blit(
-    #         self.input_box.draw(),
-    #         ((SCREEN_WIDTH / 2) - (self.input_box.width / 2),
-    #         (SCREEN_HEIGHT / 2) - self.input_box.height / 2))

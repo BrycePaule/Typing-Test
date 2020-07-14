@@ -6,8 +6,9 @@ from Stats.Timer import Timer
 from Stats.WordCounter import WordCounter
 
 
-class Stats():
+class StatisticsManager():
 
+    """ Middle man class for all statistics.  Timer / WPM / Accuracy. """
 
     def __init__(self):
         self.timer = Timer()
@@ -30,8 +31,12 @@ class Stats():
 
 
     def check_timer(self):
+        """ Checks the current timer, returns True if finished, False if not. """
+
         return self.timer.is_time_up()
 
 
     def reset(self):
+        """ Resets all stats classes. """
+
         self.__init__()

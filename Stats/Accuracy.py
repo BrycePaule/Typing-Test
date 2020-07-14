@@ -1,7 +1,7 @@
 
 
 class Accuracy():
-    """ """
+    """ TODO: implement """
 
 
     def __init__(self):

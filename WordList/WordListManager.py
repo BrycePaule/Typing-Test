@@ -1,6 +1,7 @@
 
 
 class WordListManager():
+
     """
     Handles everything to do with curating and editing the word list used for
     the typing tester.
@@ -14,7 +15,7 @@ class WordListManager():
 
     def curate(self):
         """
-        Current fix criteria:
+        Current curate criteria:
             - all words lowercase
             - only words 7 characters or less
         """

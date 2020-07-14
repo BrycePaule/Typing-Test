@@ -6,6 +6,11 @@ from Settings import FONT
 
 class WordCounter():
 
+    """
+    Tracks completed words type.  Also handles calculation of WPM based on
+    Timer's current time.
+    """
+
 
     def __init__(self):
         self.word_count = 0
@@ -32,6 +37,8 @@ class WordCounter():
 
 
     def calculate_wpm(self):
+        """ Calculates the current WPM for display. """
+
         if self.word_count == 0: return 0
         if self.time == 0: return 0
 

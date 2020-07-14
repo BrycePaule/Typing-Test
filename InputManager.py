@@ -2,11 +2,17 @@ import pygame
 
 class InputManager():
 
+    """
+    Handles all player inputs.
+    """
+
     def __init__(self, game):
         self.game = game
 
 
     def handle_events(self):
+        """ Event handler. """
+
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()

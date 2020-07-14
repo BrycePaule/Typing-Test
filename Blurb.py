@@ -97,7 +97,7 @@ class Blurb():
 
 
     def get_current_word(self, index):
-        """ Returns the current word """
+        """ Returns the current word. """
 
         return self.text[index:].split(' ')[0]
 
@@ -112,7 +112,7 @@ class Blurb():
 
 
     def update_char_state(self):
-        """ Colours the typed character based on correctness """
+        """ Colours the typed character based on correctness. """
 
         self.text_states[self.current_index][1] = 4
 
@@ -129,7 +129,11 @@ class Blurb():
 
 
     def update_word_count(self):
-        """ WORKS - currently counts the word you're typing as COMPLETE """
+        """
+        Updates the count for typed words.
+
+        ***Currently counts the current unfinished word as well***
+        """
 
         words = [word for word in self.text[:self.current_index].split(' ') if word != '']
 

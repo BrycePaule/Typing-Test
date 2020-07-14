@@ -6,6 +6,10 @@ from Settings import BG_COLOR, TEXT_MAIN
 
 class Timer():
 
+    """
+    Times runs of the typing tester, counts backwards from given interval time.
+    """
+
     def __init__(self):
         self.start_time = 0
         self.interval = 60000
@@ -27,15 +31,27 @@ class Timer():
 
 
     def start(self):
+        """ Starts the timer. """
+
         self.active = True
         self.start_time = pygame.time.get_ticks()
 
 
     def stop(self):
+        """ Sets timer to inactive. """
+
         self.active = False
 
 
     def is_time_up(self):
+        """
+        If timer is active, checks the current time.
+
+        :returns
+        True if completed.
+        False if still going.
+        """
+
         if self.active:
             now = pygame.time.get_ticks()
             dt = now - self.start_time
@@ -52,6 +68,7 @@ class Timer():
 
 
     def convert_ticks_to_time(self, milliseconds):
+        """ Converts timer in ticks to printable strings for display. """
 
         dec_places = 1
 
