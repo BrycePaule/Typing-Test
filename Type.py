@@ -42,6 +42,7 @@ class Type():
 
         self.running = False
         self.blurb.text = self.text_manager.create_random_blurb()
+        # self.blurb.text = self.text_manager.create_w_blurb()
         self.blurb.convert_text_to_state_pairs()
         self.main_loop()
 
@@ -51,6 +52,7 @@ class Type():
 
         self.reset()
         self.stat_tracker.timer.start()
+        self.stat_tracker.set_accuracy_text(self.blurb.text)
         self.running = True
         self.main_loop()
 
@@ -72,6 +74,8 @@ class Type():
             # check finish blurb
             if self.blurb.current_index >= len(self.blurb.text) - 1:
                 self.blurb.text = self.text_manager.create_random_blurb()
+                self.stat_tracker.set_accuracy_text(self.blurb.text)
+                # self.blurb.text = self.text_manager.create_w_blurb()
                 self.blurb.keystrokes = ''
                 self.blurb.convert_text_to_state_pairs()
 
@@ -84,7 +88,7 @@ class Type():
             self.input_manager.handle_events()
             self.keyboard.update()
             self.blurb.update()
-            self.stat_tracker.update(self.blurb.word_count)
+            self.stat_tracker.update(self.blurb.word_count, self.blurb.keystrokes)
 
             # draw
             self.screen.fill(BG_COLOR)

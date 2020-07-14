@@ -49,6 +49,26 @@ class TextManager():
         return text
 
 
+    def create_w_blurb(self):
+        """
+        Creates a long string of W's to test for line width / spacing.
+
+        W is the widest character
+        """
+
+        chars = 0
+        text = ''
+
+        while chars < self.blurb_char_limit:
+            word = self.words[random.randint(0, self.word_count - 1)]
+            word = 'w' * len(word)
+            text += f'{word} '
+            chars = len(text)
+
+        text += ' '
+        return text
+
+
     def print_word_list(self):
         """ Prints entire list of words on separate lines.  """
 

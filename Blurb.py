@@ -16,7 +16,7 @@ class Blurb():
         self.height = 200
         self.surface = pygame.Surface((self.width, self.height))
 
-        self.line_char_limit = 60
+        self.line_char_limit = 65
         self.text = None
         self.text_states = None
         self.lines = None
@@ -49,11 +49,9 @@ class Blurb():
 
     def draw(self):
         self.surface.fill(BG_COLOR)
+        # self.surface.fill(pygame.Color('WHITE'))
 
-        xpos = 10
-        ypos = 10
         line_height = 20
-
         x_offset = 0
         y_offset = 0
 
@@ -78,7 +76,7 @@ class Blurb():
             # # -------------------------------------------------------
 
             char = FONT.render(character, True, self.state_colour[state])
-            self.surface.blit(char, (xpos + x_offset, ypos + y_offset))
+            self.surface.blit(char, (x_offset, y_offset))
 
             # catches end of line spaces
             if character == ' ':
