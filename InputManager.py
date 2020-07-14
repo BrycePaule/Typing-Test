@@ -2,7 +2,7 @@ import pygame
 
 class InputManager():
 
-    def __init__(self, game, keyboard):
+    def __init__(self, game):
         self.game = game
 
 
@@ -18,6 +18,7 @@ class InputManager():
 
                 elif 97 <= event.key <= 122:
                     self.game.blurb.keystrokes += pygame.key.name(event.key)
+                    self.game.keyboard.add_key_press(event.key)
                     if not self.game.running:
                         self.game.start_game()
 

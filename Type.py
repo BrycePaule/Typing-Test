@@ -31,7 +31,7 @@ class Type():
         self.text_manager = TextManager()
         self.stat_tracker = Stats()
         self.keyboard = Keyboard()
-        self.input_manager = InputManager(self, self.keyboard)
+        self.input_manager = InputManager(self)
         self.running = False
 
 
@@ -78,6 +78,7 @@ class Type():
 
             # updates
             self.input_manager.handle_events()
+            self.keyboard.update()
             self.blurb.update()
             self.stat_tracker.update(self.blurb.word_count)
 
