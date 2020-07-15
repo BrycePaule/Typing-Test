@@ -11,131 +11,79 @@ class Blurb():
     has to type.
     """
 
-    def __init__(self):
+    def __init__(self, words):
         self.width = 650
         self.height = 200
         self.surface = pygame.Surface((self.width, self.height))
 
         self.line_char_limit = 65
-        self.text = None
-        self.text_states = None
-        self.lines = None
+        self.max_words = 50
 
-        self.state_colour = {
-            0: TEXT_HIGHLIGHT,
+        self.words = words
+        self.word_states = self.convert_words_to_state_pairs()
+
+        self.state_colours = {
+            0: pygame.Color('BLUE'),
             1: TEXT_MAIN,
             2: TEXT_CORRECT,
             3: TEXT_INCORRECT,
             4: TEXT_HIGHLIGHT,
         }
 
-        self.current_index = 0
-        self.prev_index = 0
-        self.current_word = None
+        self.index = 0
+        self.current_word = self.words[0]
+        self.current_word_typed = ''
 
-        self.word_count = 0
-        self.keystrokes = ''
+        self.completed_word_count = 0
+        self.results = []
 
 
     def update(self):
-        self.current_index = len(self.keystrokes)
-        self.prev_index = self.current_index - 1
-
-        if len(self.keystrokes):
-            self.update_char_state()
-
-        self.update_word_count()
+        # print(f'{self.current_word}   {self.current_word_typed}')
+        pass
 
 
     def draw(self):
         self.surface.fill(BG_COLOR)
-        # self.surface.fill(pygame.Color('WHITE'))
 
-        line_height = 20
         x_offset = 0
         y_offset = 0
+        space_width = 10
+        line_height = 20
 
-        for index, (character, state) in enumerate(self.text_states):
+        for i, (word, state) in enumerate(self.word_states):
 
-            current_word = self.get_current_word(index)
+            if i > self.max_words: break
 
-            # update x_offset / y_offset
-            line = index // self.line_char_limit
-            cum_line_limit = (line + 1) * self.line_char_limit
+            if i == self.index:
+                word_text = FONT.render(word, True, TEXT_HIGHLIGHT)
+            else:
+                word_text = FONT.render(word, True, self.state_colours[state])
 
-            y_offset = (index // self.line_char_limit) * line_height
-            if index + len(current_word) > cum_line_limit:
+
+            if x_offset + word_text.get_width() > self.width:
+                x_offset = 0
                 y_offset += line_height
-                if x_offset > 300:
-                    x_offset = 0
 
-
-            # # TESTING -----------------------------------------------
-            # if index == self.current_index:
-            #     print(f'{index} "{current_word}" {cum_line_limit} - {line} {y_offset} {x_offset}  |||  {index + len(current_word) > cum_line_limit}  |||  {current_word == ""}  |||')
-            # # -------------------------------------------------------
-
-            char = FONT.render(character, True, self.state_colour[state])
-            self.surface.blit(char, (x_offset, y_offset))
-
-            # catches end of line spaces
-            if character == ' ':
-                if index == cum_line_limit - self.line_char_limit:
-                    y_offset += line_height
-                    x_offset = 0
-                elif index == cum_line_limit - 1:
-                    y_offset += line_height
-                    x_offset = 0
-
-            # offset each letter by the previous letter's width
-            *_, char_width = FONT.metrics(character)[0]
-            x_offset += char_width
+            self.surface.blit(word_text, (x_offset, y_offset))
+            x_offset += word_text.get_width() + space_width
 
         return self.surface
 
 
-    def get_current_word(self, index):
-        """ Returns the current word. """
+    def convert_words_to_state_pairs(self):
+        """ Converts text into a list of [word, state] pairs. """
 
-        return self.text[index:].split(' ')[0]
-
-
-    def convert_text_to_state_pairs(self):
-        """ Converts text into a list of (char, state) pairs. """
-
-        self.text_states = [[char, 1] for char in self.text]
-
-        if self.keystrokes == '':
-            self.text_states[0][1] = 4
+        return [[word, 1] for word in self.words]
 
 
-    def update_char_state(self):
-        """ Colours the typed character based on correctness. """
+    def mark_and_shift(self):
+        """ Called by InputManager, marks current word and moves on.  """
 
-        self.text_states[self.current_index][1] = 4
-
-        if self.keystrokes[self.prev_index] == self.text[self.prev_index]:
-            self.text_states[self.prev_index] = [self.text_states[self.prev_index][0], 2]
+        if self.current_word_typed == self.current_word:
+            self.word_states[self.index][1] = 2
         else:
-            self.text_states[self.prev_index] = [self.text_states[self.prev_index][0], 3]
+            self.word_states[self.index][1] = 3
 
-
-    def backspace_recolour(self):
-        """ Resets backspaced character's state back to default. """
-
-        self.text_states[self.current_index][1] = 1
-
-
-    def update_word_count(self):
-        """
-        Updates the count for typed words.
-
-        ***Currently counts the current unfinished word as well***
-        """
-
-        words = [word for word in self.text[:self.current_index].split(' ') if word != '']
-
-        if len(words) == 0:
-            return 0
-        else:
-            self.word_count = len(words)
+        self.index += 1
+        self.current_word = self.words[self.index]

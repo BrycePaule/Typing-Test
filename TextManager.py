@@ -1,4 +1,6 @@
 import random
+from random import shuffle
+
 
 from Settings import WORD_LIST_FILEPATH
 
@@ -13,11 +15,11 @@ class TextManager():
     def __init__(self):
         self.words = self.read_in_words(lower=True)
         self.word_count = len(self.words)
-        self.blurb_char_limit = 110
+        self.blurb_word_limit = 200
 
 
     def read_in_words(self, lower=False):
-        """ Reads in word list from .txt file """
+        """ Reads in word list from .txt file to enumerated dictionary. """
 
         index = 0
         word_dict = {}
@@ -33,53 +35,12 @@ class TextManager():
 
 
     def create_random_blurb(self):
-        """
-        Creates a random string of words.  Adds a space at the end to allow
-        for transition to next blurb if player finishes the current blurb.
-        """
+        """ Returns random list of words, self.blurb_word_limit in length. """
 
-        chars = 0
-        text = ''
-
-        while chars < self.blurb_char_limit:
-            new_word = self.get_random_word()
-
-            while new_word in text:
-                new_word = self.get_random_word()
-
-            text += f'{self.words[random.randint(0, self.word_count - 1)]} '
-            chars = len(text)
-
-        text += ' '
-        return text
+        return [self.words[random.randint(0, self.word_count - 1)] for _ in range(self.blurb_word_limit)]
 
 
     def create_w_blurb(self):
-        """
-        Creates a long string of W's to test for line width / spacing.
+        """ Returns list of 'W', self.blurb_word_limit in length. """
 
-        W is the widest character
-        """
-
-        chars = 0
-        text = ''
-
-        while chars < self.blurb_char_limit:
-            word = self.words[random.randint(0, self.word_count - 1)]
-            word = 'w' * len(word)
-            text += f'{word} '
-            chars = len(text)
-
-        text += ' '
-        return text
-
-
-    def get_random_word(self):
-        return self.words[random.randint(0, self.word_count - 1)]
-
-
-    def print_word_list(self):
-        """ Prints entire list of words on separate lines.  """
-
-        for word in self.words:
-            print(f'{word} {self.words[word]}')
+        return [('W' * random.randint(0, 6)) for _ in range(self.blurb_word_limit)]

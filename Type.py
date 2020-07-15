@@ -25,10 +25,8 @@ class Type():
         self.screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
         self.clock = pygame.time.Clock()
 
-        self.blurb = Blurb()
-        self.input_box = InputBox()
-
         self.text_manager = TextManager()
+        self.blurb = Blurb(self.text_manager.create_random_blurb())
         self.stat_tracker = StatisticsManager()
         self.keyboard = Keyboard()
         self.input_manager = InputManager(self)
@@ -41,17 +39,17 @@ class Type():
         """ Initialises game variables. """
 
         self.running = False
-        self.blurb.text = self.text_manager.create_random_blurb()
-        self.blurb.convert_text_to_state_pairs()
+        self.blurb.words = self.text_manager.create_random_blurb()
+        self.blurb.convert_words_to_state_pairs()
         self.main_loop()
 
 
     def start_game(self):
         """ Resets stats and starts a new game. """
 
-        self.reset()
-        self.stat_tracker.timer.start()
-        self.stat_tracker.set_accuracy_text(self.blurb.text)
+        # self.reset()
+        # self.stat_tracker.timer.start()
+        # self.stat_tracker.set_accuracy_text(self.blurb.words)
         self.running = True
         self.main_loop()
 
@@ -59,7 +57,7 @@ class Type():
     def stop_game(self):
         """ Stops the current game, halts timer, DOESN'T reset. """
 
-        self.stat_tracker.timer.stop()
+        # self.stat_tracker.timer.stop()
         self.running = False
         self.main_loop()
 
@@ -71,27 +69,26 @@ class Type():
             self.clock.tick(FPS)
 
             # check finish blurb
-            if self.blurb.current_index >= len(self.blurb.text) - 1:
-                self.blurb.text = self.text_manager.create_random_blurb()
-                self.stat_tracker.set_accuracy_text(self.blurb.text)
-                self.blurb.keystrokes = ''
-                self.blurb.convert_text_to_state_pairs()
+            if self.blurb.index >= self.blurb.max_words - 1:
+                self.blurb.words = self.text_manager.create_random_blurb()
+                # self.stat_tracker.set_accuracy_text(self.blurb.words)
+                self.blurb.results = ''
 
             # check finished
-            if self.stat_tracker.check_timer():
-                print(f'WPM: {self.stat_tracker.counter.wpm}')
-                self.stop_game()
+            # if self.stat_tracker.check_timer():
+            #     print(f'WPM: {self.stat_tracker.counter.wpm}')
+            #     self.stop_game()
 
             # updates
             self.input_manager.handle_events()
             self.keyboard.update()
             self.blurb.update()
-            self.stat_tracker.update(self.blurb.word_count, self.blurb.keystrokes)
+            # self.stat_tracker.update(self.blurb.completed_word_count, self.blurb.keystrokes)
 
             # draw
             self.screen.fill(BG_COLOR)
             self.draw_blurb_box()
-            self.draw_stats()
+            # self.draw_stats()
             self.draw_keyboard()
 
             pygame.display.update()
