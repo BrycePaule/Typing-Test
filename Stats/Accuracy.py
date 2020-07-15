@@ -10,19 +10,15 @@ class Accuracy():
 
 
     def __init__(self):
-        self.text = None
-        self.keystrokes = None
-
+        self.results = None
         self.accuracy = 0
 
         self.surface = pygame.Surface((100, 100))
 
 
-    def update(self, keystrokes):
-        self.keystrokes = keystrokes
-
-        if self.text is not None and self.keystrokes is not None:
-            self.calculate_accuracy()
+    def update(self, results):
+        self.results = results
+        self.calculate_accuracy()
 
 
     def draw(self):
@@ -35,30 +31,31 @@ class Accuracy():
 
 
     def calculate_accuracy(self):
-        """ Calculates letter accuracy percentage. """
+        """
+        Calculates letter accuracy percentage as:
+            correct_chars / total_chars * 100
 
-        text_words = [word for word in self.text.split(' ')]
-        typed_words = [word for word in self.keystrokes.split(' ')][:-1]
+        Checks if word == typed_word, if not iterates through characters to
+        find how many were correct.
+        """
 
-        typed_char_count = sum([len(char) for char in typed_words if char != ' '])
-        correct_char_count = 0
+        if not self.results: return
 
-        for i, word in enumerate(typed_words):
+        total_chars = sum(len(word) for word, _ in self.results)
+        correct_chars = 0
 
-            # if word is correct
-            if word == text_words[i]:
-                correct_char_count += len(word)
+        for word, t_word in self.results:
+            if word == t_word:
+                correct_chars += len(t_word)
 
             else:
-                t_word = text_words[i]
-                for j, char in enumerate(word):
-                    if j <= len(t_word) - 1:
-                        if char == text_words[i][j]:
-                            correct_char_count += 1
+                for i, char in enumerate(word):
+                    if i < len(t_word):
+                        if char == t_word[i]:
+                            correct_chars += 1
 
-                correct_char_count -= abs(len(word) - len(t_word))
+                if diff := (len(t_word) - len(word)) > 0:
+                    total_chars += diff
 
-        if correct_char_count != 0 and typed_char_count != 0:
-            self.accuracy = int(round(correct_char_count / typed_char_count * 100))
-        else:
-            self.accuracy = 0
+
+        self.accuracy = int(round(correct_chars / total_chars * 100))

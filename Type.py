@@ -39,8 +39,6 @@ class Type():
         """ Initialises game variables. """
 
         self.running = False
-        self.blurb.words = self.text_manager.create_random_blurb()
-        self.blurb.convert_words_to_state_pairs()
         self.main_loop()
 
 
@@ -48,8 +46,7 @@ class Type():
         """ Resets stats and starts a new game. """
 
         # self.reset()
-        # self.stat_tracker.timer.start()
-        # self.stat_tracker.set_accuracy_text(self.blurb.words)
+        self.stat_tracker.timer.start()
         self.running = True
         self.main_loop()
 
@@ -57,7 +54,7 @@ class Type():
     def stop_game(self):
         """ Stops the current game, halts timer, DOESN'T reset. """
 
-        # self.stat_tracker.timer.stop()
+        self.stat_tracker.timer.stop()
         self.running = False
         self.main_loop()
 
@@ -69,26 +66,26 @@ class Type():
             self.clock.tick(FPS)
 
             # check finish blurb
-            if self.blurb.index >= self.blurb.max_words - 1:
-                self.blurb.words = self.text_manager.create_random_blurb()
-                # self.stat_tracker.set_accuracy_text(self.blurb.words)
-                self.blurb.results = ''
+            # if self.blurb.index >= self.blurb.max_words - 1:
+            #     self.blurb.words = self.text_manager.create_random_blurb()
+            #     self.stat_tracker.set_accuracy_text(self.blurb.words)
+            #     self.blurb.results = ''
 
             # check finished
-            # if self.stat_tracker.check_timer():
-            #     print(f'WPM: {self.stat_tracker.counter.wpm}')
-            #     self.stop_game()
+            if self.stat_tracker.check_timer():
+                print(f'WPM: {self.stat_tracker.counter.wpm}')
+                self.stop_game()
 
             # updates
             self.input_manager.handle_events()
             self.keyboard.update()
             self.blurb.update()
-            # self.stat_tracker.update(self.blurb.completed_word_count, self.blurb.keystrokes)
+            self.stat_tracker.update(self.blurb.completed_word_count, self.blurb.results)
 
             # draw
             self.screen.fill(BG_COLOR)
             self.draw_blurb_box()
-            # self.draw_stats()
+            self.draw_stats()
             self.draw_keyboard()
 
             pygame.display.update()

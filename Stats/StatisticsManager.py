@@ -19,9 +19,10 @@ class StatisticsManager():
         self.surface = pygame.Surface((150, 300))
 
 
-    def update(self, typed_word_count, keystrokes):
+    def update(self, typed_word_count, results):
         self.counter.update(self.timer.curr_time, typed_word_count)
-        self.accuracy.update(keystrokes)
+        self.accuracy.update(results)
+        pass
 
 
     def draw(self):
@@ -38,10 +39,6 @@ class StatisticsManager():
         """ Checks the current timer, returns True if finished, False if not. """
 
         return self.timer.is_time_up()
-
-
-    def set_accuracy_text(self, text):
-        self.accuracy.text = text
 
 
     def reset(self):

@@ -19,7 +19,7 @@ class Blurb():
         self.line_char_limit = 65
         self.max_words = 50
 
-        self.words = words
+        self.words = words[:self.max_words]
         self.word_states = self.convert_words_to_state_pairs()
 
         self.state_colours = {
@@ -39,6 +39,7 @@ class Blurb():
 
 
     def update(self):
+        # print(self.words)
         # print(f'{self.current_word}   {self.current_word_typed}')
         pass
 
@@ -80,6 +81,9 @@ class Blurb():
     def mark_and_shift(self):
         """ Called by InputManager, marks current word and moves on.  """
 
+        self.results.append([self.current_word, self.current_word_typed])
+        self.completed_word_count = len(self.results)
+
         if self.current_word_typed == self.current_word:
             self.word_states[self.index][1] = 2
         else:
@@ -87,3 +91,4 @@ class Blurb():
 
         self.index += 1
         self.current_word = self.words[self.index]
+        self.current_word_typed = ''
