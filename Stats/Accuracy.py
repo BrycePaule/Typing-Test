@@ -24,8 +24,6 @@ class Accuracy():
         if self.text is not None and self.keystrokes is not None:
             self.calculate_accuracy()
 
-        print(self.text)
-
 
     def draw(self):
         self.surface.fill(BG_COLOR)
