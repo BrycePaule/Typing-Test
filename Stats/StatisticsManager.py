@@ -45,7 +45,7 @@ class StatisticsManager():
 
 
     def reset(self):
-        """ Resets all stats classes. """
+        """ Resets all stats classes, caches previous results"""
 
         self.cache_timer = self.timer.curr_time_in_seconds
         self.cache_WPM = self.WPM.wpm

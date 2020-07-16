@@ -81,7 +81,6 @@ class Type():
             if self.running:
 
                 if self.stat_manager.check_timer():
-                    print(self.stat_manager.timer.curr_time_in_seconds)
                     self.stop_game()
 
                 if self.blurb.finished:

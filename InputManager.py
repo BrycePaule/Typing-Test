@@ -22,17 +22,18 @@ class InputManager():
                     self.game.stop_game()
 
                 elif 97 <= event.key <= 122:
-                    if self.game.running:
-                        self.game.blurb.current_word_typed += pygame.key.name(event.key)
-                        self.game.keyboard.add_key_press(event.key)
-                    else:
+                    if not self.game.running:
                         self.game.start_game()
 
+                    self.game.blurb.current_word_typed += pygame.key.name(event.key)
+                    self.game.keyboard.add_key_press(event.key)
+
                 elif event.key == pygame.K_SPACE:
-                    if self.game.running:
-                        self.game.blurb.mark_and_shift()
-                    else:
+                    if not self.game.running:
                         self.game.start_game()
+                        return
+
+                    self.game.blurb.mark_and_shift()
 
                 elif event.key == pygame.K_BACKSPACE:
                     if self.game.running:
