@@ -30,6 +30,7 @@ class Type():
         self.stat_manager = StatisticsManager()
         self.keyboard = Keyboard()
         self.input_manager = InputManager(self)
+        self.input_box = InputBox()
 
         self.running = False
         self.first_run = True
@@ -90,11 +91,13 @@ class Type():
             self.input_manager.handle_events()
             self.keyboard.update()
             self.blurb.update()
+            self.input_box.update(self.blurb.current_word_typed)
             self.stat_manager.update(self.blurb.completed_word_count, self.blurb.results)
 
             # draw
             self.screen.fill(BG_COLOR)
             self.draw_blurb_box()
+            self.draw_input_box()
             self.draw_stats()
             self.draw_keyboard()
 
@@ -109,6 +112,17 @@ class Type():
         self.screen.blit(
             self.blurb.draw(),
             (SCREEN_WIDTH / 2 - self.blurb.width / 2, SCREEN_HEIGHT / 2 - self.blurb.height)
+        )
+
+
+    def draw_input_box(self):
+        """ Draw the input box. """
+
+        blurb_lower_bound_y = SCREEN_HEIGHT / 2
+
+        self.screen.blit(
+            self.input_box.draw(),
+            (SCREEN_WIDTH / 2 - self.input_box.width / 2, blurb_lower_bound_y + 5)
         )
 
 

@@ -1,6 +1,7 @@
 import pygame
 
-from Settings import FONT, BG_COLOR
+from Settings import FONT
+from Settings import BG_COLOR, INPUT_BOX_COLOR
 from Settings import TEXT_MAIN, TEXT_HIGHLIGHT, TEXT_CORRECT, TEXT_INCORRECT
 
 
@@ -47,9 +48,14 @@ class Blurb():
 
     def draw(self):
         self.surface.fill(BG_COLOR)
+        # self.surface.fill(pygame.Color('black'))
 
-        x_offset = 0
-        y_offset = 0
+        pygame.draw.rect(self.surface, INPUT_BOX_COLOR, (0, 0, self.width, self.height), border_radius=10)
+
+        margin = 10
+        x_offset = margin
+        y_offset = margin
+
         space_width = 10
         line_height = 20
 
@@ -64,7 +70,7 @@ class Blurb():
 
 
             if x_offset + word_text.get_width() > self.width:
-                x_offset = 0
+                x_offset = 10
                 y_offset += line_height
 
             self.surface.blit(word_text, (x_offset, y_offset))
