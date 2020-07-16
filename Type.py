@@ -27,10 +27,12 @@ class Type():
 
         self.text_manager = TextManager()
         self.blurb = Blurb(self.text_manager.create_random_blurb())
-        self.stat_tracker = StatisticsManager()
+        self.stat_manager = StatisticsManager()
         self.keyboard = Keyboard()
         self.input_manager = InputManager(self)
+
         self.running = False
+        self.first_run = True
 
 
     """ GAME LOGIC """
@@ -45,18 +47,28 @@ class Type():
     def start_game(self):
         """ Resets stats and starts a new game. """
 
-        # self.reset()
-        self.stat_tracker.timer.start()
         self.running = True
-        self.main_loop()
+
+        if self.first_run:
+            self.first_run = False
+        elif not self.first_run:
+            self.reset_game()
+
+        self.stat_manager.timer.start()
 
 
     def stop_game(self):
         """ Stops the current game, halts timer, DOESN'T reset. """
 
-        self.stat_tracker.timer.stop()
+        self.stat_manager.timer.stop()
         self.running = False
-        self.main_loop()
+
+
+    def reset_game(self):
+        """ Resets game variables to run again, for multiple games. """
+
+        self.blurb.__init__(self.text_manager.create_random_blurb())
+        self.stat_manager.reset()
 
 
     def main_loop(self):
@@ -65,22 +77,21 @@ class Type():
         while True:
             self.clock.tick(FPS)
 
-            # check finish blurb
-            # if self.blurb.index >= self.blurb.max_words - 1:
-            #     self.blurb.words = self.text_manager.create_random_blurb()
-            #     self.stat_tracker.set_accuracy_text(self.blurb.words)
-            #     self.blurb.results = ''
-
             # check finished
-            if self.stat_tracker.check_timer():
-                print(f'WPM: {self.stat_tracker.counter.wpm}')
-                self.stop_game()
+            if self.running:
+
+                if self.stat_manager.check_timer():
+                    print(self.stat_manager.timer.curr_time_in_seconds)
+                    self.stop_game()
+
+                if self.blurb.finished:
+                    self.stop_game()
 
             # updates
             self.input_manager.handle_events()
             self.keyboard.update()
             self.blurb.update()
-            self.stat_tracker.update(self.blurb.completed_word_count, self.blurb.results)
+            self.stat_manager.update(self.blurb.completed_word_count, self.blurb.results)
 
             # draw
             self.screen.fill(BG_COLOR)
@@ -106,7 +117,7 @@ class Type():
         """ Draws all stats.  Stats manages wpm / timer / accuracy. """
 
         self.screen.blit(
-            self.stat_tracker.draw(),
+            self.stat_manager.draw(),
             (SCREEN_WIDTH - SCREEN_WIDTH / 8, SCREEN_HEIGHT - 7 * SCREEN_HEIGHT / 8)
         )
 
@@ -122,10 +133,3 @@ class Type():
 
     """ UTILITIES """
 
-    def reset(self):
-        """
-        Resets the stat tracker, intended for multiple runs in the same session.
-
-        TODO: rework so it carries over accuracy / wpm etc
-        """
-        self.stat_tracker.__init__()

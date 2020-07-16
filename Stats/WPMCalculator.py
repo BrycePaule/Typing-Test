@@ -4,7 +4,7 @@ from Settings import BG_COLOR, TEXT_MAIN
 from Settings import FONT
 
 
-class WordCounter():
+class WPMCalculator():
 
     """
     Tracks completed words type.  Also handles calculation of WPM based on

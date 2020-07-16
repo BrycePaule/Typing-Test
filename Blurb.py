@@ -17,7 +17,7 @@ class Blurb():
         self.surface = pygame.Surface((self.width, self.height))
 
         self.line_char_limit = 65
-        self.max_words = 50
+        self.max_words = 20
 
         self.words = words[:self.max_words]
         self.word_states = self.convert_words_to_state_pairs()
@@ -36,6 +36,7 @@ class Blurb():
 
         self.completed_word_count = 0
         self.results = []
+        self.finished = False
 
 
     def update(self):
@@ -90,5 +91,15 @@ class Blurb():
             self.word_states[self.index][1] = 3
 
         self.index += 1
-        self.current_word = self.words[self.index]
-        self.current_word_typed = ''
+        if not self.check_if_finished():
+            self.current_word = self.words[self.index]
+            self.current_word_typed = ''
+
+
+    def check_if_finished(self):
+        """ Checks if user has typed all words. """
+
+        if self.index >= self.max_words:
+            self.finished = True
+            return True
+        return False
