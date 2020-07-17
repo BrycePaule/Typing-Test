@@ -96,10 +96,12 @@ class Type():
 
             # draw
             self.screen.fill(BG_COLOR)
-            self.draw_blurb_box()
-            self.draw_input_box()
+            lower_bound = self.draw_blurb_box()
+            self.draw_input_box(lower_bound)
             self.draw_stats()
             self.draw_keyboard()
+
+            # print(str(int(self.clock.get_fps())))
 
             pygame.display.update()
 
@@ -111,14 +113,16 @@ class Type():
 
         self.screen.blit(
             self.blurb.draw(),
-            (SCREEN_WIDTH / 2 - self.blurb.width / 2, SCREEN_HEIGHT / 2 - self.blurb.height)
+            (SCREEN_WIDTH / 2 - self.blurb.width / 2, 30)
         )
 
+        return self.blurb.height + 30
 
-    def draw_input_box(self):
-        """ Draw the input box. """
 
-        blurb_lower_bound_y = SCREEN_HEIGHT / 2
+    def draw_input_box(self, blurb_lower_bound):
+        """ Draw the input box just under blurb. """
+
+        blurb_lower_bound_y = blurb_lower_bound
 
         self.screen.blit(
             self.input_box.draw(),
